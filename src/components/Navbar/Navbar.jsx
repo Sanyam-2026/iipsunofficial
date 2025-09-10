@@ -1,79 +1,75 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { signOutUser } from '../../redux/actionCreators/authActionCreator';
+import { Link, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import './Navbar.css';
 
 const Navbar = () => {
   const { isAuthenticated, user } = useSelector((state) => state.auth);
   const location = useLocation();
-  const dispatch = useDispatch();
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
     <nav className='navbar'>
-      <a href="https://www.dauniv.ac.in/" target='_blank' className='footer-text ' style={{ marginLeft: 50 + 'px' }}>
+      {/* Logo / Brand */}
+      <a
+        href="https://www.dauniv.ac.in/"
+        target='_blank'
+        rel="noreferrer"
+        className='footer-text'
+      >
         <img
           src="/assets/favicon.ico"
           alt="Davv Logo"
           className='footer-logo'
-        /> IIPS
+        />
+        IIPS
       </a>
-      <div className='navbar-container'>
+
+      {/* Hamburger */}
+      <div className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+        <div className={`bar ${menuOpen ? 'open' : ''}`} />
+        <div className={`bar ${menuOpen ? 'open' : ''}`} />
+        <div className={`bar ${menuOpen ? 'open' : ''}`} />
+      </div>
+
+      {/* Links */}
+      <div className={`navbar-container ${menuOpen ? 'open' : ''}`}>
         <div className='navbar-links'>
-          {location.pathname === '/' && (
-            <Link className='navbar-brand' to={isAuthenticated ? '/dashboard' :'/login'}>
+          {location.pathname === '/' ? (
+            <Link className='navbar-brand' to={isAuthenticated ? '/dashboard' : '/login'}>
               Academics
             </Link>
+          ) : (
+            <Link className='navbar-brand' to='/'>Home</Link>
           )}
-          {location.pathname !== '/' && (
-            <Link className='navbar-brand' to='/'>
-              Home
-            </Link>
-          )}
-          <Link className='navbar-brand' to='/placement'>
-            Placement
-          </Link>
-          <Link className='navbar-brand' to='/events'>
-            Events
-          </Link>
 
-
-          <Link className='navbar-brand' to='/aboutus'>
-            About
-          </Link>
-
-          <Link className='navbar-brand' to='/our-contributers'>
-            Contributors
-          </Link>
+          <Link className='navbar-brand' to='/placement'>Placement</Link>
+          <Link className='navbar-brand' to='/events'>Events</Link>
+          <Link className='navbar-brand' to='/aboutus'>About</Link>
+          <Link className='navbar-brand' to='/our-contributers'>Contributors</Link>
         </div>
-      </div>
-      <ul className='navbar-nav'>
-        {isAuthenticated ? (
-          <>
 
+        {/* Right Side (Auth) */}
+        <ul className='navbar-nav'>
+          {isAuthenticated ? (
             <li className='nav-item'>
               <p className='user-welcome'>
                 <span className='user-name'>{user.displayName?.toUpperCase()}</span>
                 <img className='user-icon' src="/assets/user-icon.png" alt="Admin" />
               </p>
             </li>
-
-          </>
-        ) : (
-          <>
-            <li className='nav-item'>
-              <Link className='btnNew' to='/login'>
-                Sign In
-
-              </Link>
-            </li>
-            <li className='nav-item'>
-              <Link className='btnNew' to='/Register'>
-                Sign Up
-
-              </Link>
-            </li>
-          </>
-        )}
-      </ul>
+          ) : (
+            <>
+              <li className='nav-item'>
+                <Link className='btnNew' to='/login'>Sign In</Link>
+              </li>
+              <li className='nav-item'>
+                <Link className='btnNew' to='/register'>Sign Up</Link>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
     </nav>
   );
 };
