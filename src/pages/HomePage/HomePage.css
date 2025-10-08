@@ -12,9 +12,9 @@ body, html {
   font-family: "Mulish", sans-serif;
 }
 
-.main-photo-gap {
+/* .main-photo-gap {
   margin-top: 101px !important;
-}
+} */
 
 .main-img {
   display: flex;
